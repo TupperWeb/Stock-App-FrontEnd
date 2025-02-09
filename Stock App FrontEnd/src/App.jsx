@@ -1,34 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {NavBar} from './components/NavBar'
+import { Aside } from './components/Aside'
+import { Table } from './components/Table'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="grid grid-cols-12 grid-rows-12 h-screen overflow-hidden">
+      {/* Navbar - Fila 1 */}
+      <div className="sticky top-0 col-span-12 border-b border-gray-200 row-span-1">
+        <NavBar />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* Aside - Fila 2 a 12 */}
+      <div className="col-span-2 row-span-11 row-start-2 border-r border-gray-200">
+        <Aside />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      {/* Contenedor de Table con scroll - Fila 2 a 12 */}
+      <div className="col-span-10 col-start-3 row-start-2 row-span-11 overflow-y-auto">
+        <Table />
+      </div>
+    </div>
   )
 }
 
