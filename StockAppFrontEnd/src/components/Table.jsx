@@ -15,7 +15,6 @@ export const Table = () => {
             Más acciones <span className="ml-1">▾</span>
           </button>
         </div>
-
         {/* Buscador */}
         <div className="relative">
           <input
