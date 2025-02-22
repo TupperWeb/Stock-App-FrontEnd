@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
 import { Send } from 'lucide-react';
 
 export const Login = () => {
