@@ -1,10 +1,23 @@
-import { Search, ChevronLeft, ChevronRight, PlusCircle, Trash2, X } from "lucide-react"
+import { Search, ChevronLeft, ChevronRight, PlusCircle, Trash2, X, ShoppingBasket } from "lucide-react"
 import { useState } from "react"
 import Swal from "sweetalert2"
 
 export const Table = () => {
 
+  const products = [
+    { id: 1, code: '051570', name: 'Papas', stock: 150, price: 2.50 },
+    { id: 2, code: '051571', name: 'Manzanas', stock: 89, price: 3.20 },
+    { id: 3, code: '051572', name: 'Naranjas', stock: 120, price: 2.80 },
+    { id: 4, code: '051573', name: 'Uvas', stock: 100, price: 3.50 },
+    { id: 5, code: '051574', name: 'Zanahorias', stock: 180, price: 3.00 },
+    { id: 6, code: '051575', name: 'Zapallos', stock: 130, price: 3.70 },
+    { id: 7, code: '051576', name: 'Peras', stock: 110, price: 3.30 },
+    { id: 8, code: '051577', name: 'Bananas', stock: 200, price: 2.70 },
+    { id: 9, code: '051578', name: 'Maracuyas', stock: 140, price: 3.90 },
+  ];
+
   const [cart, setCart] = useState([])
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
   // Función para agregar al carrito
   const agregarACarrito = (e, product) => {
@@ -63,28 +76,23 @@ export const Table = () => {
     modal.classList.add('flex')
   }
 
-  const products = [
-    { id: 1, code: '051570', name: 'Papas', stock: 150, price: 2.50 },
-    { id: 2, code: '051571', name: 'Manzanas', stock: 89, price: 3.20 },
-    { id: 3, code: '051572', name: 'Naranjas', stock: 120, price: 2.80 },
-    { id: 4, code: '051573', name: 'Uvas', stock: 100, price: 3.50 },
-    { id: 5, code: '051574', name: 'Zanahorias', stock: 180, price: 3.00 },
-    { id: 6, code: '051575', name: 'Fresas', stock: 130, price: 3.70 },
-    { id: 7, code: '051576', name: 'Peras', stock: 110, price: 3.30 },
-    { id: 8, code: '051577', name: 'Bananas', stock: 200, price: 2.70 },
-    { id: 9, code: '051578', name: 'Maracuyas', stock: 140, price: 3.90 },
-  ];
+  // Función de búsqueda actualizada
+const searchProduct = (e) => {
+  const searchQuery = e.target.value.toLowerCase();
+  const filtered = products.filter(product => 
+    product.name.toLowerCase().includes(searchQuery)
+  );
+  setFilteredProducts(filtered); // Actualiza el estado correcto
+};
 
   return (
     <div className="p-4 relative overflow-x-auto sm:rounded-lg">
       <header className="flex flex-col items-center justify-between mb-4">
-        <div className="mb-6 p-4 bg-white rounded-lg shadow-md border border-slate-200 ml-auto">
-          <h3 className="text-lg font-semibold mb-4 text-right">Orden de Compras</h3>
-          <span className="text-lg font-bold flex justify-end">Total: ${calcularTotal().toFixed(2)}</span>
-          <button onClick={showModal} className="cursor-pointer px-4 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-700 transition-colors">
-            Detalles del carrito
+          <button onClick={showModal} className="ml-auto flex justify-center gap-2 cursor-pointer px-4 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-700 transition-colors">
+            <ShoppingBasket />
+            ${calcularTotal().toFixed(2)}
           </button>
-          <div className="modal absolute hidden flex-col top-14 right-[50%] w-80 bg-white border border-slate-200 rounded-md shadow-md p-4 z-10">
+          <div className="modal fixed hidden flex-col top-20 left-1/2 w-80 bg-white border border-slate-200 rounded-md shadow-md p-4 z-10 transform -translate-x-1/2">
             <button className="cursor-pointer" onClick={closeModal}>
               <X className="ml-auto mb-4" />
             </button>
@@ -98,7 +106,7 @@ export const Table = () => {
                 </div>
                 <button 
                   onClick={() => eliminarDelCarrito(item.id)}
-                  className="text-red-500 hover:text-red-700 flex items-center"
+                  className="cursor-pointer text-red-500 hover:text-red-700 flex items-center"
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
                   Eliminar
@@ -118,7 +126,6 @@ export const Table = () => {
               </button>
             </div>
           </div>
-        </div>
         <div className="flex items-center w-full py-2">
           <button className="px-4 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-700 transition-colors">
             Crear Orden
@@ -129,14 +136,15 @@ export const Table = () => {
           <button className="ml-3 px-4 py-2 border border-gray-300 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center">
             Más acciones <span className="ml-1">▾</span>
           </button>
-          <div className="relative ml-auto">
+          <form className="relative ml-auto">
             <input
               type="text"
-              placeholder="Buscar orden"
+              onChange={searchProduct}
+              placeholder="Buscar producto"
               className="pl-4 pr-10 py-2 border rounded-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             />
             <Search className="w-5 h-5 absolute right-3 top-2.5 text-gray-400 dark:text-gray-500" />
-          </div>
+          </form>
         </div>
       </header>
       {/* Tabs */}
@@ -178,7 +186,7 @@ export const Table = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 bg-white">
-            {products.map(product => (
+            {filteredProducts.map(product => (
               <tr key={product.id} className="hover:bg-slate-50 transition-colors">
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">{product.code}</td>
                 <td className="px-6 py-4 text-sm text-slate-900">{product.name}</td>
@@ -199,7 +207,7 @@ export const Table = () => {
                     />
                     <button 
                       type="submit"
-                      className="flex items-center gap-1 text-green-600 hover:text-green-800"
+                      className="cursor-pointer flex items-center gap-1 text-green-600 hover:text-green-800"
                     >
                       <PlusCircle className="w-5 h-5" />
                       Agregar
